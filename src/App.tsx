@@ -1,7 +1,6 @@
 import "./App.css";
 
-function App() {
-  const tracks = [
+const tracks = [
     {
       id: 1,
       title: "Musicfun soundtrack",
@@ -24,12 +23,34 @@ function App() {
     },
   ];
 
+function App() {
+  
+  if (tracks === null) {
+    return (
+     <>
+        <h1>Musicfun player</h1>
+        <div>Загрузка....</div>
+     </>
+    )
+  }
+
+  if (tracks.length === 0) {
+    return (
+      <>
+        <h1>Musicfun player</h1>
+        <div>Плейлист пуст</div>
+      </>
+    );
+  }
+
+  const selectedTrackId = 1
+
   return (
     <>
       <h1>Musicfun player</h1>
       <ul>
         {tracks.map((track) => (
-          <li key={track.id}>
+          <li key={track.id} style={{ border: track.id === selectedTrackId ? "1px solid orange" : "none" }}>
             <div>{track.title}</div>
             <audio src={track.url} controls></audio>
           </li>
