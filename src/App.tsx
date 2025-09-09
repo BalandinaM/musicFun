@@ -1,4 +1,5 @@
 import "./App.css";
+import { useState } from "react";
 
 const tracks = [
     {
@@ -24,6 +25,7 @@ const tracks = [
   ];
 
 function App() {
+  const [selectedTrackId, setSelectedTrackId] = useState(null);
   
   if (tracks === null) {
     return (
@@ -43,15 +45,14 @@ function App() {
     );
   }
 
-  const selectedTrackId = 1
-
   return (
     <>
       <h1>Musicfun player</h1>
+      <button onClick={() => {setSelectedTrackId(null)}}>Сбросить выбор</button>
       <ul>
         {tracks.map((track) => (
           <li key={track.id} style={{ border: track.id === selectedTrackId ? "1px solid orange" : "none" }}>
-            <div>{track.title}</div>
+            <div onClick={() => {setSelectedTrackId(track.id)}}>{track.title}</div>
             <audio src={track.url} controls></audio>
           </li>
         ))}
