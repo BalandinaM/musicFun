@@ -16,6 +16,22 @@ function App() {
       .then((json) => setTracks(json.data));
   }, []);
 
+  useEffect(() => {
+    fetch(
+      "https://musicfun.it-incubator.app/api/1.0/playlists/tracks/" +
+        selectedTrackId,
+      {
+        headers: {
+          "api-key": "ed0903f6-b8d9-453b-bc94-0934df440675",
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((json) => {
+        setSelectedTrack(json.data);
+      });
+  }, [selectedTrackId]);
+
   if (tracks === null) {
     return (
       <>
@@ -56,19 +72,6 @@ function App() {
             <div
               onClick={() => {
                 setSelectedTrackId(track.id);
-                fetch(
-                  "https://musicfun.it-incubator.app/api/1.0/playlists/tracks/" +
-                    track.id,
-                  {
-                    headers: {
-                      "api-key": "ed0903f6-b8d9-453b-bc94-0934df440675",
-                    },
-                  }
-                )
-                  .then((res) => res.json())
-                  .then((json) => {
-                    setSelectedTrack(json.data);
-                  });
               }}
             >
               {track.attributes.title}
@@ -79,9 +82,16 @@ function App() {
       </ul>
       <div>
         <h3>Детали</h3>
-        {selectedTrack === null ? (
-          "Track is not selected"
-        ) : (
+        {!selectedTrack && !selectedTrackId && "Track is not selected"}
+        {/*если треков нет, но трек выбран покажем "Loading..."*/}
+        {!selectedTrack && selectedTrackId && "loading..."}
+        {/*если треки есть, и трек выбран, но ID не совпадают, покажем "Loading..."*/}
+        {selectedTrack &&
+          selectedTrackId &&
+          selectedTrack.id !== selectedTrackId &&
+          "Loading..."}
+        {/*если треки есть, трек выбран и ID совпадают, покажем JSX*/}
+        {selectedTrack && selectedTrack.id === selectedTrackId && (
           <div>
             <h3>{selectedTrack.attributes.title}</h3>
             <h4>Lyrics</h4>
